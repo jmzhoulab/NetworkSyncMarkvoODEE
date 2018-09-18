@@ -1,0 +1,90 @@
+function dx=LCODE(t,x)
+
+%Irreducible Matrix
+%n=500;
+%L=rand(n)*10;
+%for i=1:n
+%L(i,i)=-(sum(L(i,:))-L(i,i));
+%end
+%L=round(L);
+L=[   -39     6     1     0     8     2     5     7     8     1
+     2   -42     4     7     0     7     9     3    10     0
+     6     9   -60     4     7     3     8     8     5     9
+     5     7     0   -44     4     5     6     6     9     2
+     9     2     1     5   -35     2     8     4     2     3
+     8     4     2     4     5   -53     7     7    10     7
+     5     9     2     8     7     4   -46     5     3     3
+     0     9     6     5     4     9     3   -44     3     5
+     8     4     3     2     3     9     3     7   -40     1
+     4     9     2     7     2     6     5     6     7   -49];
+L_dim=length(L);
+c=100;
+t
+E=zeros(L_dim,L_dim);
+i0=maxlocation(L);
+E(i0,i0)=1;
+
+dx_length=L_dim*3+4;
+lh=dx_length;
+dx=zeros(dx_length,1);
+
+% s(t)
+s = x(1:3);
+dx(1:3)= f(s);
+ ex=zeros(3,1);
+    
+% x_i(t)
+for i=1:L_dim
+      
+    xi = x(3*i+(1:3));
+    ic=0;
+    %p=diag(rand(1,3));
+    for k=1:L_dim
+    ex(1)=x(3*k+1)-x(1);
+    ex(2)=x(3*k+2)-x(2);
+    ex(3)=x(3k*+3)-x(3);
+        ic=ic+14*exi'*exi;
+    end
+    
+    ux=f(xi)-c*E(i,i)*x(lh)*(h(xi)-h(s));  
+    
+    for j=1:L_dim        
+        xj=h(x(3*j+(1:3)));        
+        ux=ux+c*L(i,j)*x(lh)*xj;
+    end
+    
+    dx(3*i+(1:3))=ux;
+end
+dx(lh)=ic;
+end
+
+function  fx=f(x)
+%Lorenz's oscillators
+fx = zeros(3,1);
+fx(1)= 10*(x(2) - x(1));
+fx(2)= 28*x(1)- x(1)*x(3) - x(2);
+fx(3)= x(1)*x(2) -8/3*x(3);
+end
+
+function  hx=h(x)
+hx=x;
+end
+function w=maxlocation(A)
+m=length(A);
+B=zeros(1,m);
+for j=1:m
+    B(j)=sum(A(:,j))-A(j,j);
+end
+b=B(1);n=1;
+for i=1:m
+    for j=i+1:m
+        if B(j)>=B(i)&&B(j)>=b
+            n=j;
+            b=B(j);
+        else
+            q=1;
+        end
+    end
+end
+w=n;
+end
